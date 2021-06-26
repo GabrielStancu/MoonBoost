@@ -17,7 +17,9 @@
             <Picker Grid.Column="1"
                     ItemsSource="{Binding Plans}"
                     SelectedItem="{Binding SelectedPlan}"
-                    ItemDisplayBinding="{Binding Name}">
+                    ItemDisplayBinding="{Binding Name}"
+                    HorizontalTextAlignment="Center"
+                    VerticalTextAlignment="Center">
             </Picker>
             <Button Grid.Column="2" 
                     Text="NP" 
@@ -25,14 +27,18 @@
         </Grid>
 
         <ScrollView>
-            <ListView ItemsSource="{Binding ToDos}" HasUnevenRows="True" ItemSelected="OnSelectedPost" SelectedItem="{Binding SelectedToDo}">
+            <ListView ItemsSource="{Binding Activities}" 
+                      HasUnevenRows="True" 
+                      ItemSelected="OnSelectedPost" 
+                      SelectedItem="{Binding SelectedActivity}"
+                      SeparatorVisibility="None">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
                             <ViewCell.View>
                                 <StackLayout Orientation="Horizontal">
                                     <CheckBox IsChecked="{Binding Completed}"/>
-                                    <Label Text="{Binding Activity.Title}"/>
+                                    <Label Text="{Binding Title}" VerticalTextAlignment="Center"/>
                                 </StackLayout>
                             </ViewCell.View>
                         </ViewCell>

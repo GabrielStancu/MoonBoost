@@ -19,7 +19,7 @@ namespace Data.DataAccess
             return planContext;
         }
 
-        public async Task<T> SelectByIdAsync(int id)
+        protected async Task<T> SelectByIdAsync(int id)
         {
             using (var context = CreateContext())
             {
@@ -27,7 +27,7 @@ namespace Data.DataAccess
             }
         }
 
-        public async Task<List<T>> SelectAllAsync()
+        protected async Task<List<T>> SelectAllAsync()
         {
             using (var context = CreateContext())
             {
@@ -35,7 +35,7 @@ namespace Data.DataAccess
             }
         }
 
-        public async Task InsertAsync(T entity)
+        protected async Task InsertAsync(T entity)
         {
             using (var context = CreateContext())
             {
@@ -49,7 +49,7 @@ namespace Data.DataAccess
             }
         }
 
-        public async Task UpdateAsync(T entity)
+        protected async Task UpdateAsync(T entity)
         {
             using (var context = CreateContext())
             {
@@ -58,7 +58,7 @@ namespace Data.DataAccess
             }
         }
 
-        public async Task DeleteAsync(T entity)
+        protected async Task DeleteAsync(T entity)
         {
             using (var context = CreateContext())
             {

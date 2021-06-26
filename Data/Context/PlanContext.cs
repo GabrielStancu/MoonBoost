@@ -9,7 +9,6 @@ namespace Data.Context
     public class PlanContext: DbContext
     {
         public DbSet<Activity> Activity { get; private set; }
-        public DbSet<ToDo> ToDo { get; private set; }
         public DbSet<Plan> Plan { get; private set; }
 
         private const string _databaseName = "planner.db";

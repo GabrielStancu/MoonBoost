@@ -5,41 +5,72 @@
 
     <StackLayout>
         <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" 
-                    Text="NA" 
-                    Clicked="OnNewActivityClicked"/>
-            <Picker Grid.Column="1"
+            <Picker Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="4"
                     ItemsSource="{Binding Plans}"
                     SelectedItem="{Binding SelectedPlan}"
                     ItemDisplayBinding="{Binding Name}"
                     HorizontalTextAlignment="Center"
-                    VerticalTextAlignment="Center">
-            </Picker>
-            <Button Grid.Column="2" 
+                    VerticalTextAlignment="Center"
+                    SelectedIndexChanged="OnCurrentPlanChanged"/>
+            <Button Grid.Row="1"
+                    Grid.Column="0" 
+                    Text="NA" 
+                    Clicked="OnNewActivityClicked"/>
+            <Button Grid.Row="1"
+                    Grid.Column="1" 
                     Text="NP" 
                     Clicked="OnNewPlanClicked"/>
+            <Button Grid.Row="1"
+                    Grid.Column="2" 
+                    Text="DP" 
+                    Clicked="OnDeletePlanClicked"
+                    IsEnabled="{Binding EnabledDeletePlanButton}"/>
+            <Button Grid.Row="1"
+                    Grid.Column="3" 
+                    Text="ND" 
+                    Clicked="OnNewDayClicked"
+                    IsEnabled="{Binding EnabledNewDayButton}"/>
         </Grid>
 
         <ScrollView>
             <ListView ItemsSource="{Binding Activities}" 
                       HasUnevenRows="True" 
-                      ItemSelected="OnSelectedPost" 
+                      ItemSelected="OnActivitySelected" 
                       SelectedItem="{Binding SelectedActivity}"
                       SeparatorVisibility="None">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
                             <ViewCell.View>
-                                <StackLayout Orientation="Horizontal">
-                                    <CheckBox IsChecked="{Binding Completed}"/>
-                                    <Label Text="{Binding Title}" VerticalTextAlignment="Center"/>
-                                </StackLayout>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <CheckBox Grid.Column="0"
+                                              IsChecked="{Binding Completed}"/>
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Title}" 
+                                           VerticalTextAlignment="Center"/>
+                                    <Button Grid.Column="2"
+                                            Text="DA"
+                                            Clicked="OnDeleteActivityClicked"/>
+                                </Grid>
                             </ViewCell.View>
                         </ViewCell>
                     </DataTemplate>

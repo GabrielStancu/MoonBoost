@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Data.Models
 {
@@ -6,5 +7,6 @@ namespace Data.Models
     {
         public string Name { get; set; }
         public List<Activity> Activities { get; set; }
+        public DateTime PlanDate { get; set; }
     }
 }

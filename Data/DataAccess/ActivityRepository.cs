@@ -1,5 +1,8 @@
 ﻿using Data.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Data.DataAccess
@@ -29,7 +32,27 @@ namespace Data.DataAccess
 
         public async Task DeleteActivity(Activity activity)
         {
-            await DeleteAsync(activity);
+            var activities = await CreateContext()
+                .Activity
+                .Where(a => a.Title == activity.Title)
+                .ToListAsync();
+
+            foreach (var a in activities)
+            {
+                await DeleteAsync(a);
+            }
+        }
+
+        public async Task<IEnumerable<Activity>> CreateDailyActivities(Plan plan)
+        {
+            var activities = new List<Activity>();
+            foreach (var activity in plan.Activities)
+            {
+                var todayActivity = await CreateActivity(activity.Title, plan.Id);
+                activities.Add(todayActivity);
+            }
+
+            return activities;
         }
     }
 }

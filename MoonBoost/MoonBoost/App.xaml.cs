@@ -1,4 +1,5 @@
 ﻿using Business.ViewModels;
+using Data.DataAccess;
 using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -11,7 +12,7 @@ namespace MoonBoost
         {
             InitializeComponent();
 
-            MainPage = new MainPage(new MainPageViewModel());
+            MainPage = new MainPage(new MainPageViewModel(new ActivityRepository(), new PlanRepository()));
         }
 
         protected override void OnStart()

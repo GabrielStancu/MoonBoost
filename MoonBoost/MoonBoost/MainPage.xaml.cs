@@ -38,12 +38,6 @@ namespace MoonBoost
             _model.LoadPlanActivitiesAsync();
         }
 
-        private async void OnActivitySelected(object sender, SelectedItemChangedEventArgs e)
-        {
-            var activityName = await DisplayPromptAsync("Rename activity", "Type new activity name...");
-            await _model.AddActivityToPlanAsync(activityName);
-        }
-
         private async void OnDeletePlanClicked(object sender, EventArgs e)
         {
             if (_model.SelectedPlan != _model.Plans[0])
@@ -57,21 +51,26 @@ namespace MoonBoost
             }
         }
 
-        private async void OnDeleteActivityClicked(object sender, EventArgs e)
-        {
-            bool? deleteActivity = await DisplayAlert("Deleting activity", "Do you want to proceed deleting this activity?", "Yes", "No");
+        //private async void OnDeleteActivityClicked(object sender, EventArgs e)
+        //{
+        //    bool? deleteActivity = await DisplayAlert("Deleting activity", "Do you want to proceed deleting this activity?", "Yes", "No");
 
-            if (deleteActivity != null && deleteActivity == true)
-            {
-                await _model.DeleteActivityAsync();
-            }
-        }
+        //    if (deleteActivity != null && deleteActivity == true)
+        //    {
+                
+        //    }
+        //}
 
         private async void OnNewDayClicked(object sender, EventArgs e)
         {
             await _model.StartNewDayAsync();
         }
 
-        
+        private async void OnRenameActivityClicked(object sender, EventArgs e)
+        {
+            var activityName = await DisplayPromptAsync("Rename activity", "Type new activity name...");
+            //await _model.AddActivityToPlanAsync(activityName);
+            _model.NewActivityName = activityName;
+        }
     }
 }

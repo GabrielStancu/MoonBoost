@@ -8,6 +8,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -43,12 +44,16 @@
                     Text="ND" 
                     Clicked="OnNewDayClicked"
                     IsEnabled="{Binding EnabledNewDayButton}"/>
+
+            <Label Grid.Row="2"
+                   Grid.Column="1"
+                   Grid.ColumnSpan="2"
+                   Text="{Binding SelectedPlan.PlanDate}"/>
         </Grid>
 
         <ScrollView>
             <ListView ItemsSource="{Binding Activities}" 
                       HasUnevenRows="True" 
-                      ItemSelected="OnActivitySelected" 
                       SelectedItem="{Binding SelectedActivity}"
                       SeparatorVisibility="None">
                 <ListView.ItemTemplate>
@@ -60,6 +65,7 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
                                     <CheckBox Grid.Column="0"
@@ -69,7 +75,13 @@
                                            VerticalTextAlignment="Center"/>
                                     <Button Grid.Column="2"
                                             Text="DA"
-                                            Clicked="OnDeleteActivityClicked"/>
+                                            Command="{Binding DeleteActivityCommand}"
+                                            CommandParameter="{Binding .}"/>
+                                    <Button Grid.Column="3"
+                                            Text="RA"
+                                            Clicked="OnRenameActivityClicked"
+                                            Command="{Binding RenameActivityCommand}"
+                                            CommandParameter="{Binding .}"/>
                                 </Grid>
                             </ViewCell.View>
                         </ViewCell>

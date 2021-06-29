@@ -4,6 +4,8 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace Business.ViewModels
 {
@@ -12,18 +14,17 @@ namespace Business.ViewModels
         private readonly ActivityRepository _activityRepository;
         private readonly PlanRepository _planRepository;
 
-        public ObservableCollection<Activity> Activities { get; set; } = new ObservableCollection<Activity>();
-        public ObservableCollection<Plan> Plans { get; set; } = new ObservableCollection<Plan>();
-        private Activity _selectedActivity;
-        public Activity SelectedActivity
+        private ObservableCollection<Activity> _activities;
+        public ObservableCollection<Activity> Activities 
         {
-            get { return _selectedActivity; }
+            get { return _activities; } 
             set
             {
-                _selectedActivity = value;
-                SetProperty<Activity>(ref _selectedActivity, value);
+                _activities = value;
+                SetProperty<ObservableCollection<Activity>>(ref _activities, value);
             }
-        }
+        } 
+        public ObservableCollection<Plan> Plans { get; set; } = new ObservableCollection<Plan>();
         private Plan _selectedPlan;
         public Plan SelectedPlan 
         { 
@@ -58,10 +59,18 @@ namespace Business.ViewModels
             }
         }
 
+        public string NewActivityName { get; set; }
+        public ICommand RenameActivityCommand { get; private set; }
+        public ICommand DeleteActivityCommand { get; private set; }
+
         public MainPageViewModel(ActivityRepository activityRepository, PlanRepository planRepository)
         {
             _activityRepository = activityRepository;
             _planRepository = planRepository;
+            Activities = new ObservableCollection<Activity>();
+
+            RenameActivityCommand = new Command<Activity>(async(Activity activity) => { await RenameActivityAsync(activity); });
+            DeleteActivityCommand = new Command<Activity>(async(Activity activity) => { await DeleteActivityAsync(activity); });
         }
 
         public async Task LoadPlansAsync()
@@ -100,9 +109,9 @@ namespace Business.ViewModels
             SelectedPlan = plan;
         }
 
-        public async Task RenameActivityAsync(string newActivityName)
+        public async Task RenameActivityAsync(Activity activity)
         {
-            await _activityRepository.RenameActivity(SelectedActivity, newActivityName);
+            await _activityRepository.RenameActivity(activity, NewActivityName);
         }
 
         public async Task DeletePlanAsync()
@@ -112,11 +121,10 @@ namespace Business.ViewModels
             SelectedPlan = Plans[0];
         }
 
-        public async Task DeleteActivityAsync()
+        public async Task DeleteActivityAsync(Activity activity)
         {
-            await _activityRepository.DeleteActivity(SelectedActivity);
-            Activities.Remove(SelectedActivity);
-            SelectedActivity = null;
+            await _activityRepository.DeleteActivity(activity);
+            Activities.Remove(activity);
         }
 
         public async Task StartNewDayAsync()

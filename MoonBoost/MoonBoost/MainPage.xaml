@@ -2,77 +2,86 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MoonBoost.MainPage"
-             x:Name="ActivitiesPage">
-
+             x:Name="ActivitiesPage"
+             xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+             BackgroundColor="#011D33">
     <StackLayout>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <yummy:PancakeView BackgroundColor="White" CornerRadius="0, 0, 30, 30">
+            <StackLayout Orientation="Horizontal" HeightRequest="90">
+                <Picker ItemsSource="{Binding Plans}"
+                        SelectedItem="{Binding SelectedPlan}"
+                        ItemDisplayBinding="{Binding Name}"
+                        HorizontalTextAlignment="Center"
+                        VerticalTextAlignment="Center"
+                        SelectedIndexChanged="OnCurrentPlanChanged"
+                        FontSize="Large"
+                        TextColor="#011D33"
+                        HorizontalOptions="FillAndExpand"
+                        Margin="5, 0"/>
+                <Button Text="+" 
+                        Clicked="OnOptionsClicked"
+                        BackgroundColor="#011D33"
+                        Margin="15,15"
+                        CornerRadius="40"
+                        TextColor="White"
+                        FontSize="30"
+                        Padding="0, 0, 0, 2"/>
+            </StackLayout>
+        </yummy:PancakeView>
 
-            <Picker Grid.Row="0"
-                    Grid.Column="0"
-                    ItemsSource="{Binding Plans}"
-                    SelectedItem="{Binding SelectedPlan}"
-                    ItemDisplayBinding="{Binding Name}"
-                    HorizontalTextAlignment="Center"
-                    VerticalTextAlignment="Center"
-                    SelectedIndexChanged="OnCurrentPlanChanged"/>
-            <Button Grid.Row="0"
-                    Grid.Column="1"
-                    Text="+" 
-                    Clicked="OnOptionsClicked"/>
 
-            <Label Grid.Row="1"
-                   Grid.Column="0"
-                   Grid.ColumnSpan="2"
-                   Text="{Binding SelectedPlan.PlanDate}"/>
-        </Grid>
+        <Label Text="{Binding SelectedPlan.PlanDate, StringFormat='{0:dd MMMM, yyyy}'}"
+                   HorizontalOptions="Center"
+                   FontSize="Large"
+                       TextColor="White"
+               Margin="0, 10"/>
+          
+        
 
-        <ScrollView>
+        <!--<ScrollView>-->
+        <yummy:PancakeView BackgroundColor="White" CornerRadius="30, 30, 0, 0">
             <ListView ItemsSource="{Binding Activities}" 
-                      HasUnevenRows="True" 
-                      SelectedItem="{Binding SelectedActivity}"
-                      SeparatorVisibility="None">
+                          HasUnevenRows="True" 
+                          SelectedItem="{Binding SelectedActivity}"
+                          SeparatorVisibility="None"
+                          Margin="0, 10">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
                             <ViewCell.View>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <Grid.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding Path=BindingContext.RenameActivityCommand, Source={x:Reference ActivitiesPage}}"
+                                <Frame BackgroundColor="#011D33" 
+                                       CornerRadius="20" 
+                                       Margin="10, 3">
+                                    <StackLayout Orientation="Horizontal">
+                                        <StackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Path=BindingContext.RenameActivityCommand, Source={x:Reference ActivitiesPage}}"
                                                               CommandParameter="{Binding .}"
                                                               NumberOfTapsRequired="1"
                                                               Tapped="OnRenameActivityClicked"/>
-                                        <TapGestureRecognizer Command="{Binding Path=BindingContext.DeleteActivityCommand, Source={x:Reference ActivitiesPage}}"
+                                            <TapGestureRecognizer Command="{Binding Path=BindingContext.DeleteActivityCommand, Source={x:Reference ActivitiesPage}}"
                                                               CommandParameter="{Binding .}"
                                                               NumberOfTapsRequired="2"
                                                               Tapped="OnDeleteActivityClicked"/>
-                                </Grid.GestureRecognizers>
+                                        </StackLayout.GestureRecognizers>
 
-                                    <CheckBox Grid.Column="0"
-                                              IsChecked="{Binding Completed}"/>
-                                    <Label Grid.Column="1"
-                                           Text="{Binding Title}" 
-                                           VerticalTextAlignment="Center"/>
-                                </Grid>
+                                        <CheckBox IsChecked="{Binding Completed}"
+                                              Color="white"
+                                              />
+                                        <Label Text="{Binding Title}" 
+                                           VerticalTextAlignment="Center"
+                                           HorizontalTextAlignment="Start"
+                                           TextColor="white"   
+                                           FontSize="Large"/>
+                                    </StackLayout>
+                                </Frame>
+
                             </ViewCell.View>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-        </ScrollView>
+        </yummy:PancakeView>
+        
+        <!--</ScrollView>-->
     </StackLayout>
 </ContentPage>

@@ -40,7 +40,8 @@ namespace Data.DataAccess
             var plan = new Plan()
             {
                 Name = name,
-                PlanDate = DateTime.Today
+                PlanDate = DateTime.Today,
+                Activities = new List<Activity>()
             };
 
             await InsertAsync(plan);

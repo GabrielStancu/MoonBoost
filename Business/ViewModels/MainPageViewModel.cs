@@ -33,18 +33,17 @@ namespace Business.ViewModels
             {
                 _selectedPlan = value;
                 SetProperty(ref _selectedPlan, value);
-                EnabledNewDayButton = _selectedPlan.PlanDate < DateTime.Today;
             }
         }
 
-        private bool _enabledNewDayButton;
-        public bool EnabledNewDayButton
+        private Activity _selectedActivity;
+        public Activity SelectedActivity
         {
-            get { return _enabledNewDayButton; }
-            set
+            get { return _selectedActivity; }
+            set 
             {
-                _enabledNewDayButton = value;
-                SetProperty<bool>(ref _enabledNewDayButton, value);
+                _selectedActivity = value;
+                SetProperty<Activity>(ref _selectedActivity, value);
             }
         }
 
@@ -59,9 +58,8 @@ namespace Business.ViewModels
             }
         }
 
-        public string NewActivityName { get; set; }
-        public ICommand RenameActivityCommand { get; private set; }
-        public ICommand DeleteActivityCommand { get; private set; }
+        public Command RenameActivityCommand { get; set; }
+        public Command DeleteActivityCommand { get; set; }
 
         public MainPageViewModel(ActivityRepository activityRepository, PlanRepository planRepository)
         {
@@ -69,8 +67,8 @@ namespace Business.ViewModels
             _planRepository = planRepository;
             Activities = new ObservableCollection<Activity>();
 
-            RenameActivityCommand = new Command<Activity>(async(Activity activity) => { await RenameActivityAsync(activity); });
-            DeleteActivityCommand = new Command<Activity>(async(Activity activity) => { await DeleteActivityAsync(activity); });
+            RenameActivityCommand = new Command<Activity>(activity => { SetSelectedActivityCommand(activity); });
+            DeleteActivityCommand = new Command<Activity>(activity => { SetSelectedActivityCommand(activity); });
         }
 
         public async Task LoadPlansAsync()
@@ -109,9 +107,14 @@ namespace Business.ViewModels
             SelectedPlan = plan;
         }
 
-        public async Task RenameActivityAsync(Activity activity)
+        public void SetSelectedActivityCommand(Activity activity)
         {
-            await _activityRepository.RenameActivity(activity, NewActivityName);
+            SelectedActivity = activity;
+        }
+
+        public async Task RenameActivityAsync(string name)
+        {
+            await _activityRepository.RenameActivity(SelectedActivity, name);
         }
 
         public async Task DeletePlanAsync()
@@ -121,32 +124,27 @@ namespace Business.ViewModels
             SelectedPlan = Plans[0];
         }
 
-        public async Task DeleteActivityAsync(Activity activity)
+        public async Task DeleteActivityAsync()
         {
-            await _activityRepository.DeleteActivity(activity);
-            Activities.Remove(activity);
+            await _activityRepository.DeleteActivity(SelectedActivity);
+            Activities.Remove(SelectedActivity);
         }
 
         public async Task StartNewDayAsync()
         {
-            foreach (var plan in Plans)
+            if(SelectedPlan.PlanDate < DateTime.Today)
             {
-                await _planRepository.UpdatePlanDate(plan);
-                var activities = await _activityRepository.CreateDailyActivities(plan);
-                plan.Activities = activities.ToList();
-
-                if(plan.Id == SelectedPlan.Id)
+                await _planRepository.UpdatePlanDate(SelectedPlan);
+                var activities = await _activityRepository.CreateDailyActivities(SelectedPlan);
+                SelectedPlan.Activities = activities.ToList();
+                Activities.Clear();
+                foreach (var activity in SelectedPlan.Activities)
                 {
-                    Activities.Clear();
-                    foreach (var activity in plan.Activities)
-                    {
-                        Activities.Add(activity);
-                    }
+                    Activities.Add(activity);
                 }
-            }
 
-            SelectedPlan.PlanDate = DateTime.Today;
-            EnabledNewDayButton = false;
+                SelectedPlan.PlanDate = DateTime.Today;
+            }  
         }
 
         private async Task SelectCurrentPlanAsync()

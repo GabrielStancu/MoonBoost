@@ -7,6 +7,15 @@ namespace Data.Models
     {
         public string Name { get; set; }
         public List<Activity> Activities { get; set; }
-        public DateTime PlanDate { get; set; }
+        private DateTime _planDate;
+        public DateTime PlanDate 
+        { 
+            get { return _planDate; } 
+            set
+            {
+                _planDate = value;
+                SetProperty<DateTime>(ref _planDate, value);
+            }
+        }
     }
 }

@@ -5,7 +5,16 @@ namespace Data.Models
 {
     public class Activity: BaseModel
     {
-        public string Title { get; set; }
+        private string _title;
+        public string Title 
+        {
+            get { return _title; } 
+            set
+            {
+                _title = value;
+                SetProperty<string>(ref _title, value);
+            }
+        }
         [Column("Plan_Id")]
         public int PlanId { get; set; }
         public DateTime Date { get; set; }

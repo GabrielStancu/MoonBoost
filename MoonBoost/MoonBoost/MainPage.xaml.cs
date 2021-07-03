@@ -1,4 +1,5 @@
 ﻿using Business.ViewModels;
+using Data.Models;
 using System;
 using Xamarin.Forms;
 
@@ -18,7 +19,7 @@ namespace MoonBoost
         {
             base.OnAppearing();
             await _model.LoadPlansAsync();
-            _model.LoadPlanActivitiesAsync();
+            //_model.LoadPlanActivitiesAsync();
         }
 
         private void OnCurrentPlanChanged(object sender, EventArgs e)
@@ -101,6 +102,17 @@ namespace MoonBoost
             {
                 await DisplayAlert("Error", "Cannot delete default plan", "OK");
             }
-        }   
+        }
+
+        private async void OnActivityStatusChanged(object sender, CheckedChangedEventArgs e)
+        {
+            var cb = (CheckBox)sender;
+            var activity = (Activity)cb.BindingContext;
+
+            if(activity != null)
+            {
+                await _model.UpdateActivityStatusAsync(activity);
+            }    
+        }
     }
 }

@@ -30,6 +30,11 @@ namespace Data.DataAccess
             await UpdateAsync(activity);
         }
 
+        public async Task UpdateActivityStatusAsync(Activity activity)
+        {
+            await UpdateAsync(activity);
+        }
+
         public async Task DeleteActivity(Activity activity)
         {
             var activities = await CreateContext()

@@ -47,17 +47,6 @@ namespace Business.ViewModels
             }
         }
 
-        private bool _enabledDeletePlanButton;
-        public bool EnabledDeletePlanButton
-        {
-            get { return _enabledDeletePlanButton; }
-            set
-            {
-                _enabledDeletePlanButton = value;
-                SetProperty<bool>(ref _enabledDeletePlanButton, value);
-            }
-        }
-
         public Command RenameActivityCommand { get; set; }
         public Command DeleteActivityCommand { get; set; }
 
@@ -91,12 +80,12 @@ namespace Business.ViewModels
             {
                 Activities.Add(activity);
             }
-            EnabledDeletePlanButton = SelectedPlan.Id != Plans[0].Id;
         }
 
         public async Task AddActivityToPlanAsync(string activityName)
         {
             var activity = await _activityRepository.CreateActivity(activityName, SelectedPlan.Id);
+            SelectedPlan.Activities.Add(activity);
             Activities.Add(activity);
         }
 
@@ -110,6 +99,11 @@ namespace Business.ViewModels
         public void SetSelectedActivityCommand(Activity activity)
         {
             SelectedActivity = activity;
+        }
+
+        public async Task UpdateActivityStatusAsync(Activity activity)
+        {
+            await _activityRepository.UpdateActivityStatusAsync(activity);
         }
 
         public async Task RenameActivityAsync(string name)
@@ -128,6 +122,7 @@ namespace Business.ViewModels
         {
             await _activityRepository.DeleteActivity(SelectedActivity);
             Activities.Remove(SelectedActivity);
+            SelectedPlan.Activities.Remove(SelectedActivity);
         }
 
         public async Task StartNewDayAsync()

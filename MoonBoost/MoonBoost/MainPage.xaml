@@ -5,8 +5,8 @@
              x:Name="ActivitiesPage"
              xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
              BackgroundColor="#011D33">
-    <StackLayout>
-        <yummy:PancakeView BackgroundColor="White" CornerRadius="0, 0, 30, 30">
+    <StackLayout Spacing="0">
+        <yummy:PancakeView BackgroundColor="White" CornerRadius="0, 0, 0, 30">
             <StackLayout Orientation="Horizontal" HeightRequest="90">
                 <Picker ItemsSource="{Binding Plans}"
                         SelectedItem="{Binding SelectedPlan}"
@@ -21,25 +21,33 @@
                 <Button Text="+" 
                         Clicked="OnOptionsClicked"
                         BackgroundColor="#011D33"
-                        Margin="15,15"
+                        Margin="25,15"
                         CornerRadius="40"
                         TextColor="White"
                         FontSize="30"
-                        Padding="0, 0, 0, 2"/>
+                        Padding="0, 0, 0, 2"
+                        WidthRequest="60"/>
             </StackLayout>
         </yummy:PancakeView>
 
 
-        <Label Text="{Binding SelectedPlan.PlanDate, StringFormat='{0:dd MMMM, yyyy}'}"
-                   HorizontalOptions="Center"
-                   FontSize="Large"
+        <yummy:PancakeView BackgroundColor="White">
+            <yummy:PancakeView BackgroundColor="#011D33" CornerRadius="30, 0, 30, 0">
+                <Label Text="{Binding SelectedPlan.PlanDate, StringFormat='{0:dd MMMM, yyyy}'}"
+                       HorizontalOptions="CenterAndExpand"
+                       FontSize="Large"
                        TextColor="White"
-               Margin="0, 10"/>
+                       BackgroundColor="#011D33"
+                       VerticalOptions="FillAndExpand"
+                       Margin="0, 15"/>
+            </yummy:PancakeView>
+        </yummy:PancakeView>
+        
           
         
 
         <!--<ScrollView>-->
-        <yummy:PancakeView BackgroundColor="White" CornerRadius="30, 30, 0, 0">
+        <yummy:PancakeView BackgroundColor="White" CornerRadius="0, 30, 0, 0">
             <ListView ItemsSource="{Binding Activities}" 
                           HasUnevenRows="True" 
                           SelectedItem="{Binding SelectedActivity}"
@@ -50,7 +58,7 @@
                         <ViewCell>
                             <ViewCell.View>
                                 <Frame BackgroundColor="#011D33" 
-                                       CornerRadius="20" 
+                                       CornerRadius="30" 
                                        Margin="10, 3">
                                     <StackLayout Orientation="Horizontal">
                                         <StackLayout.GestureRecognizers>
@@ -65,8 +73,8 @@
                                         </StackLayout.GestureRecognizers>
 
                                         <CheckBox IsChecked="{Binding Completed}"
-                                              Color="white"
-                                              />
+                                                  Color="White"
+                                                  CheckedChanged="OnActivityStatusChanged"/>
                                         <Label Text="{Binding Title}" 
                                            VerticalTextAlignment="Center"
                                            HorizontalTextAlignment="Start"
